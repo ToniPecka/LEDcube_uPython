@@ -1,3 +1,5 @@
+# Rain mode
+
 import display
 import point
 import ledcube
