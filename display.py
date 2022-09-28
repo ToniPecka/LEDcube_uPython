@@ -1,16 +1,17 @@
 # display Base function definitions and pico output pins for it
+# Waveshare 1,3" LCD displej for Raspberry Pi Pico, 240×240, SPI
 
 from machine import Pin, SPI, PWM
 import framebuf
 import time
 import os
 
-BL = 13
-DC = 8
-RST = 12
-MOSI = 11
-SCK = 10
-CS = 9
+BL = 13 # Back light 
+DC = 8 # Data = High, Command = Low
+RST = 12 # Reset Low active
+MOSI = 11 # SPI data input
+SCK = 10 # SPI clock input
+CS = 9 # Chip Select = Low active
 
 
 class LCD_1inch3(framebuf.FrameBuffer):
@@ -51,7 +52,7 @@ class LCD_1inch3(framebuf.FrameBuffer):
         self.cs(1)
 
     def init_display(self):
-        """Initialize dispaly"""
+        """Initialize display"""
         self.rst(1)
         self.rst(0)
         self.rst(1)
@@ -153,7 +154,7 @@ class LCD_1inch3(framebuf.FrameBuffer):
         self.spi.write(self.buffer)
         self.cs(1)
 
-# display activation and button definitions
+# display activation
 pwm = PWM(Pin(BL))
 pwm.freq(1000)
 pwm.duty_u16(32768)  # max 65535
@@ -163,11 +164,13 @@ LCD = LCD_1inch3()
 LCD.fill(LCD.white)
 LCD.show()
 
+# Button definition
 keyA = Pin(15, Pin.IN, Pin.PULL_UP)
 keyB = Pin(17, Pin.IN, Pin.PULL_UP)
 keyX = Pin(19, Pin.IN, Pin.PULL_UP)
 keyY = Pin(21, Pin.IN, Pin.PULL_UP)
 
+# Joystick definition
 up = Pin(2, Pin.IN, Pin.PULL_UP)
 dowm = Pin(18, Pin.IN, Pin.PULL_UP)
 left = Pin(16, Pin.IN, Pin.PULL_UP)
