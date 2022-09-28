@@ -4,54 +4,48 @@ import display
 import point
 import ledcube
 from random import randrange
-from time import sleep
 
-# rain time period
-# rain_time = 0.03
-# rain_gap = 0.03
-
-#lists of drops
+# empty list of drops
 drops = []
 
 def rain():
+    # goes through a list of drops shows them and drops them
     for drop in drops:
         if drop.z == 0:
             drops.remove(drop)
-            drop.delete()
         ledcube.show(str(drop))
-        # sleep(rain_gap)
-        drop.rain()
+        drop.rain() # Moves drop down
 
-def new_drops():
-    # vytvoření 4 kapek ve 4 různých kvadrantech
+def new_drop():
+    # Creates a new random drop
     drops.append(point.Point(randrange(1,9), randrange(1,9), 8))
-    '''
-    drops.append(point.Point(randrange(4,9), randrange(1,4), 8))
-    drops.append(point.Point(randrange(1,4), randrange(4,9), 8))
-    drops.append(point.Point(randrange(4,9), randrange(4,9), 8))
-    '''
     
 def run():
-    #počáteční 4 kapky
-    new_drops()
-
+    new_drop() # Creates a first drop
+    count = 1
+  
     while (1):
-        # Button A
+        # Button A Mode change
         if display.keyA.value() == 0:
             display.LCD.fill_rect(208, 15, 30, 30, display.LCD.red)
             sleep(0.25)
-            break #vyskočení z modu
+            break # stops this mode and moves to another
         else:
             display.LCD.fill_rect(208, 15, 30, 30, display.LCD.white)
             display.LCD.rect(208, 15, 30, 30, display.LCD.red)   
         display.LCD.show()
 
-        # vykresleni kapek na LED kostce
+        # Displays drops on LEDcube
         rain()
-
-        # tvorba dalších kapek
-        new_drops()
+        count += 1
         
-        # sleep(rain_time)
-
+        # Creates a next drop every 6th layer
+        if count == 4:
+            new_drop()      
+            count = 1
+        
     return 1
+
+# For testing display control
+if __name__ == '__main__':
+    run()
